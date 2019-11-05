@@ -107,9 +107,9 @@ responseListONRL.append(outChan2)
 // uses some previously created net channels
 def emitDetails = new DataDetails(dName: MCpiData.getName(),
     dInitMethod: MCpiData.init,
-    dInitData: [1024],
+    dInitData: [2048],
     dCreateMethod: MCpiData.create,
-    dCreateData: [100000]
+    dCreateData: [1000000]
 )
 
 def resultDetails = new ResultDetails(rName: MCpiResultsSerialised.getName(),
