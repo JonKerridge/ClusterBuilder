@@ -61,10 +61,10 @@ Use Gradle to build the project
 
 To run the system
     in folder builtScripts
-        execute RunHost it will produce some output but then wait for nodes
+        execute RunHostManifest it will produce some output but then wait for nodes
         execute RunNode1 you will need to input an integer for the last part of the IP address use 2
         execute RunNode2 you will need to input an integer for the last part of the IP address use 3
-    The network should run and the RunHost console should show the final answer and everything terminates
+    The network should run and the RunHostManifest console should show the final answer and everything terminates
 
 The console windows I get are as follows
 
@@ -76,7 +76,7 @@ Host waiting for node IPs
 Node  0 = 127.0.0.2
 Node  1 = 127.0.0.3
 Host starting
-3.1417139512195122, RunHost has terminated
+3.1417139512195122, RunHostManifest has terminated
 
 Process finished with exit code 0
 
@@ -122,4 +122,35 @@ Provided you can justify why we have adopted this approach rather than loading o
 That will be someone else's project once Java and Groovy have settled down.
 
 Hope this all makes sense!
+
+Since then I have constructed versions of the code that run on a real network and these have been added to the github repo.
+
+In Intellij you can create Artifacts and these can be jar files, including jar files for Groovy scripts, see builtNetScripts.
+
+These mirror the ones in built scripts but have the communications added to permit interaction across a network.
+The only bits that change are the initial interactions.  I implemented the version that asks the user to type in the host
+node IP address at each of the nodes.
+
+Creating the jars is to be blunt a bit of a pain becasue the Intellij interface is far from user friendly!
+
+Each jar requires a manifest file that tells the jar the entry point to the code.  It is easiest to put these
+manifests into separate folders.  There are two versions one for the ones that run on a 127 style network and ones that
+run on real networks.  If you do not create these folders intelli overwrites the single manifest directory.
+
+Project Structure tab  as an Artifact tab, in which you can create the artifact description but you need to undertake the
+operations in the correct sequence!!
+I have removed the artifacts that create the 127 style network jars to avoid confusion.
+One crucial thing is to ensure that each artifact is create during a project build.
+
+Once all the jars have been created copy them onto a usb stick so that you can then copy to another machine and run the code.
+
+use the command java -jar 'jarfilename'   eg java -jar RunNetNode1.jar
+
+you must run the host node first and you will need to note the IP address so that you can type it in when requested to the
+other nodes.  The order in which you start the rest does not matter.  I got the network to run on my home 192.168.1.??? network.
+You must make sure that the jar files are available on the machine in some way.  You must not run the jar files from the
+ usb stick because you are likely to remove it and in that case the jar will not find all the libraries it requires.
+
+ I will try to capture the artifact creation process in another document.
+
 Jon

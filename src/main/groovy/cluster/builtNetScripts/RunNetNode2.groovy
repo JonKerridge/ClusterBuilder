@@ -1,7 +1,14 @@
-package cluster.boilerPlate
+package cluster.builtNetScripts
 
+import GPP_Library.cluster.connectors.NodeRequestingFanAny
+import GPP_Library.connectors.reducers.AnyFanOne
+import GPP_Library.functionals.groups.AnyGroupAny
+import cluster.data.SerializedMCpiData
+import groovyJCSP.PAR
+import jcsp.lang.Channel
 import jcsp.net2.NetChannel
 import jcsp.net2.NetChannelInput
+import jcsp.net2.NetChannelOutput
 import jcsp.net2.Node
 import jcsp.net2.tcpip.TCPIPNodeAddress
 import jcsp.userIO.Ask
@@ -47,6 +54,7 @@ assert (message == hostIP): "Run Node - $nodeIP: expected $hostIP received $mess
 
 // now create all the net input channels
 // this bit filled in by Builder
+NetChannelInput inChan1 = NetChannel.numberedNet2One(100)
 
 // inform host that input channels have been created
 hostRequest.write(nodeIP)
@@ -55,13 +63,42 @@ assert (message == hostIP): "Run Node - $nodeIP: expected $hostIP received $mess
 
 // now create all the net output channels
 // this bit filled in by Builder
+def otherNode1Address = new TCPIPNodeAddress(hostIP, 1000)
+NetChannelOutput outChan1 = NetChannel.one2net(otherNode1Address, 101)
+def otherNode2Address = new TCPIPNodeAddress(hostIP, 1000)
+NetChannelOutput outChan2 = NetChannel.one2net(otherNode2Address, 102)
+
 
 // inform host that output channels have been created
 hostRequest.write(nodeIP)
 message = hostResponse.read()
 assert (message == hostIP): "Run Node - $nodeIP: expected $hostIP received $message : output channel creation"
 
+println "Run Node - $nodeIP: defining network"
 // now define the processes for the node including the additional ones required
+int workers = 4   //copied from cluster definition file
+
+def chan1 = Channel.one2any()
+def chan2 = Channel.any2one()
+def nrfa = new NodeRequestingFanAny(
+    request: outChan1,
+    response: inChan1,
+    outputAny: chan1.out(),
+    destinations: workers
+)
+def group = new AnyGroupAny(
+    inputAny: chan1.in(),
+    outputAny: chan2.out(),
+    workers: workers,
+    function: SerializedMCpiData.withinOp
+)
+def afo = new AnyFanOne(
+    inputAny: chan2.in(),
+    output: outChan2,
+    sources: workers
+)
+println "Run Node - $nodeIP: defined network"
+
 
 // inform host that process network has been defined
 hostRequest.write(nodeIP)
@@ -70,5 +107,8 @@ assert (message == hostIP): "Run Node - $nodeIP: expected $hostIP received $mess
 
 // now invoke Process Manager to run process network
 // this bit filled in by Builder
+
+println "Node $nodeIP starting"
+new PAR([nrfa, group, afo]).run()
 
 println "Run Node - $nodeIP: has terminated"
