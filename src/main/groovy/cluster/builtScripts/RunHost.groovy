@@ -18,6 +18,10 @@ import jcsp.net2.NetChannelOutput
 import jcsp.net2.Node
 import jcsp.net2.tcpip.TCPIPNodeAddress
 
+/**
+ * This version works regardless of whether the script specifies
+ * ListGroupList or AnyGroupAny
+ */
 
 /**
  * The script used to create a host process network containing an emit and collector processes.
