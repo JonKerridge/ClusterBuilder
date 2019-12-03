@@ -131,7 +131,7 @@ These mirror the ones in built scripts but have the communications added to perm
 The only bits that change are the initial interactions.  I implemented the version that asks the user to type in the host
 node IP address at each of the nodes.
 
-Creating the jars is to be blunt a bit of a pain becasue the Intellij interface is far from user friendly!
+Creating the jars is to be blunt a bit of a pain because the Intellij interface is far from user friendly!
 
 Each jar requires a manifest file that tells the jar the entry point to the code.  It is easiest to put these
 manifests into separate folders.  There are two versions one for the ones that run on a 127 style network and ones that

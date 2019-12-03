@@ -37,6 +37,7 @@ def hostAddress = new TCPIPNodeAddress(1000)
 // the rest of the script is common to all network environments
 Node.getInstance().init(hostAddress)
 String hostIP = hostAddress.getIpAddress()
+
 println "Host running on $hostIP for $nodes worker nodes"
 
 // create request channel

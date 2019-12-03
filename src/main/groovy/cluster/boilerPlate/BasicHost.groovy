@@ -15,11 +15,11 @@ int nodes = 0   // this value should be modified using clusterScript.gpp by the 
 
 // this part works on a loop-back network and
 // should be commented out when running on a real network
-String hostIP127 = "127.0.0.1"
-def hostAddress = new TCPIPNodeAddress(hostIP127, 1000)
+//String hostIP127 = "127.0.0.1"
+//def hostAddress = new TCPIPNodeAddress(hostIP127, 1000)
 
 // this part works on a real network
-//def hostAddress = new TCPIPNodeAddress(1000)
+def hostAddress = new TCPIPNodeAddress(1000)
 
 // the rest of the script is common to all network environments
 Node.getInstance().init(hostAddress)
