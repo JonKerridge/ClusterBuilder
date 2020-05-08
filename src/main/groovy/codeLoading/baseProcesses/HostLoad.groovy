@@ -1,5 +1,7 @@
 package codeLoading.baseProcesses
 
+import groovyJCSP.PAR
+import jcsp.lang.CSProcess
 import jcsp.net2.NetChannel
 import jcsp.net2.NetChannelInput
 import jcsp.net2.NetChannelOutput
@@ -41,10 +43,20 @@ class HostLoad {
     }
     println "Host has sent Agents to Nodes"
     for ( n in 0 ..< nodes){
-      println " From node $n have read ${fromNodeAgents.read()}"
+//      println " From node $n have read ${fromNodeAgents.read()}"
+      assert fromNodeAgents.read() == nodeIPs[n]:"Error loading node ${nodeIPs[n]}"
     }
     for ( n in 0 ..< nodes) {
       toNodeAgents[n].write(hostIP)
     }
+    println "Host now running its process network"
+    CSProcess hp = new HostProcess( hostIP: hostIP,
+                                    nodeIPs: nodeIPs,
+                                    fromNodeAgents: fromNodeAgents,
+                                    toNodeAgents: toNodeAgents)
+    List <CSProcess> network
+    network = [hp]
+    new PAR(network).run()
+    println "Host Node has terminated"
   }
 }
