@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/RunNetHost_jar</output-path>
     <root id="archive" name="RunNetHost.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/main/groovy/RunNetHost/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/groovy/initialVersion/RunNetHost/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="ClusterBuilder.main" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-swing/3.0.0-rc-1/eb98daa9bb89363019107a32b49b26974dcf7021/groovy-swing-3.0.0-rc-1.jar" path-in-jar="/" />
