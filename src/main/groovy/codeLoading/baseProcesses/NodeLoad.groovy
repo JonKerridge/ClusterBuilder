@@ -15,7 +15,7 @@ class NodeLoad {
     def nodeAddress = new TCPIPNodeAddress(1000)
     Node.getInstance().init(nodeAddress)
     String nodeIP = nodeAddress.getIpAddress()
-    println "Node $nodeIP running"
+//    println "Node $nodeIP running"
     // create net input channel from host node
     NetChannelInput fromHost = NetChannel.numberedNet2One(1, new CodeLoadingChannelFilter.FilterRX() )
     //connect to host
@@ -27,13 +27,13 @@ class NodeLoad {
     toHost.write(nodeIP)
     message = fromHost.read()
     assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : initial interaction"
-    println "Node $nodeIP awaiting agent load"
+//    println "Node $nodeIP awaiting agent load"
     // load Agent process from Host
     def agent = fromHost.read() as MobileAgent
     def processManager = new ProcessManager(agent)
     println "Node $nodeIP starting"
     processManager.start()
     processManager.join()
-    println "Node $nodeIP has terminated"
+//    println "Node $nodeIP has terminated"
   }
 }

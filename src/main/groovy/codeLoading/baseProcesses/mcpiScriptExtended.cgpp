@@ -1,7 +1,10 @@
-package initialVersion.cluster.gppScript
+package codeLoading.baseProcesses
 
 import groovyParallelPatterns.DataDetails
 import groovyParallelPatterns.ResultDetails
+import groovyParallelPatterns.cluster.connectors.NodeRequestingFanAny
+import groovyParallelPatterns.cluster.connectors.OneNodeRequestedList
+import groovyParallelPatterns.connectors.reducers.AnyFanOne
 import groovyParallelPatterns.functionals.groups.AnyGroupAny
 import groovyParallelPatterns.terminals.Collect
 import groovyParallelPatterns.terminals.Emit
@@ -23,25 +26,32 @@ def resultDetails = new ResultDetails(
     rCollectMethod: MCpiResultsSerialised.collector,
     rFinaliseMethod: MCpiResultsSerialised.finalise
 )
-
 int cores = 4
 int clusters = 2
-
-//@ Cluster clusters
-def group = new AnyGroupAny(
-    workers: cores,
-    function: SerializedMCpiData.withinOp
-)
 
 //@ Emit IP-emit
 def emit = new Emit (
     eDetails: emitDetails
 )
+def onrl = new OneNodeRequestedList()
+
+
+//@ Cluster clusters
+def nrfa = new NodeRequestingFanAny(
+    destinations: cores
+)
+def group = new AnyGroupAny(
+    workers: cores,
+    function: SerializedMCpiData.withinOp
+)
+def afo = new AnyFanOne(
+    sources: cores
+)
 
 //@ Collect IP-collect
+def afoC = new AnyFanOne(
+    sources: clusters
+)
 def collector = new Collect(
     rDetails: resultDetails
 )
-
-
-

@@ -26,10 +26,11 @@ class HostLoad {
       nodeIPAddresses << new TCPIPNodeAddress(nodeIP,1000)
       nodeInitialChannels << NetChannel.one2net(nodeIPAddresses[n], 1, new CodeLoadingChannelFilter.FilterTX())
     }
+    long initialTime = System.currentTimeMillis()
     for ( n in 0 ..< nodes){
       nodeInitialChannels[n].write(hostIP)
     }
-    println "Host about to send Agents to Nodes"
+//    println "Host about to send Agents to Nodes"
     NetChannelInput fromNodeAgents = NetChannel.numberedNet2One(2 )
     List <NetChannelOutput> toNodeAgents = []
     for ( n in 0 ..< nodes){
@@ -41,7 +42,7 @@ class HostLoad {
                                   // initialise net channel parameters
                                   )
     }
-    println "Host has sent Agents to Nodes"
+//    println "Host has sent Agents to Nodes"
     for ( n in 0 ..< nodes){
 //      println " From node $n have read ${fromNodeAgents.read()}"
       assert fromNodeAgents.read() == nodeIPs[n]:"Error loading node ${nodeIPs[n]}"
@@ -49,14 +50,18 @@ class HostLoad {
     for ( n in 0 ..< nodes) {
       toNodeAgents[n].write(hostIP)
     }
-    println "Host now running its process network"
-    CSProcess hp = new HostProcess( hostIP: hostIP,
+//    println "Host now running its process network"
+    long processStart = System.currentTimeMillis()
+    // replace with name of application
+    CSProcess hp = new MCpiHostProcess( hostIP: hostIP,
                                     nodeIPs: nodeIPs,
                                     fromNodeAgents: fromNodeAgents,
                                     toNodeAgents: toNodeAgents)
     List <CSProcess> network
     network = [hp]
     new PAR(network).run()
-    println "Host Node has terminated"
+    long processEnd = System.currentTimeMillis()
+    println "Host Node: Loading: ${processStart - initialTime} " +
+        "Processing: ${processEnd - processStart}"
   }
 }

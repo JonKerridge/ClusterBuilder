@@ -20,11 +20,12 @@ class NodeAgent implements MobileAgent{
 
   @Override
   void run() {
-    println "Node $nodeIP invoking its process network"
-    CSProcess np = new NodeProcess(hostIP: hostIP, nodeIP: nodeIP)
+    //    println "Node $nodeIP invoking its process network"
+    // chnage to name of application Node Process
+    CSProcess np = new MCpiNodeProcess(hostIP: hostIP, nodeIP: nodeIP)
     List <CSProcess> network
     network = [ np ]
     new PAR(network).run()
-    println "Node $nodeIP terminating"
+//    println "Node $nodeIP terminating"
   }
 }
