@@ -30,7 +30,7 @@ class MCpiNodeProcess implements CSProcess {
     def hostAddress = new TCPIPNodeAddress(hostIP, 2000)
     // create host request output channel
     def toHost = NetChannel.any2net(hostAddress, 2)
-    // send host the IP of this Node and get response
+    // send host the IP of this Node and get response confirming receipt
     toHost.write(nodeIP)
     message = fromHost.read()
     assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : confirm node process load"

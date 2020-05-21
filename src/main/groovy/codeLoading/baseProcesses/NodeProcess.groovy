@@ -27,24 +27,21 @@ class NodeProcess implements CSProcess {
     // send host the IP of this Node and get response
     toHost.write(nodeIP)
     message = fromHost.read()
-    assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : confirm node process load"
-    message = fromHost.read()
-    assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : start input net channel creation"
-    // create net input channels - defined by builder
+    assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : confirm node initialisation"
+    // read input channel index numbers from host
+    List < List <Integer> > inputVCNs= fromHost.read()
+    // create net input channels - defined by builder - uses inputVCNs
     //@ NodeNetInputChannels
-//    println "Created node $nodeIP net input channels"
     toHost.write(nodeIP)
-    message = fromHost.read()
-    assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : confirm input net channel creation"
-    // create net output channels - defined by builder
+    List outChannels = fromHost.read()
+    // create net output channels - defined by builder -uses outChannels
+    // each entry in the List is a list comprising [nodeIP, vcn]
     //@ NodeNetOutputChannels
-//    println "Created node $nodeIP net output channels"
     toHost.write(nodeIP)
     message = fromHost.read()
     assert (message == hostIP): "Node Load - $nodeIP: expected $hostIP received $message : confirm output net channel creation"
-//    println "Node $nodeIP about to run its process network"
-    // node network specification - defined by builder
     long processStart = System.currentTimeMillis()
+    // node network specification - defined by builder
     //@ NodeProcess
     CSProcess tp = new TestNodeProcess()
     List <CSProcess> network
